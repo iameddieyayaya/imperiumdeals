@@ -26,6 +26,7 @@ __pycache__/
 *.pyd
 env/
 venv/
+.venv/
 
 # Database
 *.sqlite3
@@ -58,3 +59,5 @@ build/
 *.bak
 *.tmp
 *.temp
+
+node_modules/
