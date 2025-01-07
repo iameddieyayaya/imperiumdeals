@@ -12,11 +12,16 @@ export class PriceHistory {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   recordedAt: Date;
 
-  @ManyToOne(() => Product, (product) => product.priceHistories)
+  @ManyToOne(() => Product, (product) => product.priceHistories, { nullable: false })
   product: Product;
 
-  constructor(price: number, recordedAt: Date, product: Product) {
-    this.id = 0;
+  constructor(
+    id: number,
+    price: number,
+    recordedAt: Date = new Date(),
+    product: Product,
+  ) {
+    this.id = id;
     this.price = price;
     this.recordedAt = recordedAt;
     this.product = product;

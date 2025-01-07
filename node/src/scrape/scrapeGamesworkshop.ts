@@ -1,9 +1,9 @@
-// src/scrape/scrapeProducts.ts
 import puppeteer from 'puppeteer';
 import { AppDataSource } from '../data-source';
 import { Product } from '../entities/Product';
+import { PriceHistory } from '../entities/PriceHistory';
 
-export const scrapeWarhammerProducts = async () => {
+export const scrapeGamesworkshop = async () => {
   try {
     await AppDataSource.initialize();
 
@@ -27,13 +27,13 @@ export const scrapeWarhammerProducts = async () => {
         const priceText = cardElement.querySelector("[data-testid='product-card-current-price']")?.textContent?.trim();
         const url = cardElement.querySelector("a")?.getAttribute("href");
 
-        const price = priceText ? parseFloat(priceText.replace("$", "").trim()) : NaN; 
+        const price = priceText ? parseFloat(priceText.replace("$", "").trim()) : NaN;
 
         if (isNaN(price)) {
           console.log('Invalid price:', priceText);
           return null;
         }
-  
+
         return {
           name,
           price,
@@ -50,23 +50,39 @@ export const scrapeWarhammerProducts = async () => {
     }
 
     const productRepository = AppDataSource.getRepository(Product);
-    const productsToSave = productList.map((product) => {
-      console.log({ product });
-      return productRepository.create({
-        name: product.name,
-        price: product.price,
-        description: product.description,
-        url: product.url,
-        isOnlineOnly: product.isOnlineOnly,
+    const priceHistoryRepository = AppDataSource.getRepository(PriceHistory);
+    for (const productData of productList) {
+      console.log({ product: productData });
+
+      let product = await productRepository.findOneBy({ name: productData.name });
+
+      if (!product) {
+        product = productRepository.create({
+          name: productData.name,
+          price: productData.price,
+          description: productData.description,
+          url: productData.url,
+          isOnlineOnly: productData.isOnlineOnly,
+        });
+        await productRepository.save(product);
+      } else {
+        if (product.price !== productData.price) {
+          product.price = productData.price;
+          await productRepository.save(product);
+        }
+      }
+      const priceHistory = priceHistoryRepository.create({
+        price: productData.price,
+        recordedAt: new Date(),
+        product: product,
       });
-    });
+      await priceHistoryRepository.save(priceHistory);
+    }
 
-    await productRepository.save(productsToSave);
-
-    console.log('Products saved to database successfully.');
-
+    console.log('Products and price histories saved to the database successfully.');
     await browser.close();
     await AppDataSource.destroy();
+    return productList;
   } catch (error) {
     console.error('Error during scraping:', error);
   }

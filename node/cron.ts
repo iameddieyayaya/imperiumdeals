@@ -1,7 +1,7 @@
 import { CronJob } from 'cron';
 import { factions } from './src/scrape/wargameportal/factions';
 import { scrapeWargamePortal } from './src/scrape/wargameportal/scrapeWargamePortal';
-import { scrapeWarhammerProducts } from './src/scrape/scrapeProducts';
+import { scrapeGamesworkshop } from './src/scrape/scrapeGamesworkshop';
 import { saveScrapedData } from './src/scrape/saveScrapedData';
 import { Product } from './src/entities/Product';
 import { AppDataSource } from './src/data-source';
@@ -9,8 +9,8 @@ import { AppDataSource } from './src/data-source';
 async function runScrapingTask() {
   console.log('Running the scraping task...');
   try {
-    // const gwProducts = await scrapeWarhammerProducts();
-
+    
+    await scrapeGamesworkshop();
     console.log('Starting scrape for wargamesportal all factions...');
     const allProducts: { name: string; price: string; url: string; faction?: string }[] = [];
 
@@ -38,7 +38,7 @@ async function runScrapingTask() {
 AppDataSource.initialize()
   .then(async () => {
     console.log('Data Source Initialized');
-    await runScrapingTask(); // Run task once immediately
+    await runScrapingTask();
 
     const job = new CronJob('0 * * * *', runScrapingTask, null, true, 'America/Los_Angeles');
     job.start();
