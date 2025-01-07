@@ -7,13 +7,29 @@ export const scrapeGamesworkshop = async () => {
   try {
     await AppDataSource.initialize();
 
+    const url = 'https://www.warhammer.com/en-US/shop/warhammer-40000/xenos-armies/tyranids';
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
-    await page.goto('https://www.warhammer.com/en-US/shop/warhammer-40000', {
-      waitUntil: 'domcontentloaded',
+
+    console.log(`Navigating to ${url}...`);
+    const navigationPromise = page.goto(url, { waitUntil: 'load' });
+    await navigationPromise;
+
+    await page.setViewport({
+      width: 1200,
+      height: 800,
     });
 
-    await page.waitForSelector('.product-card');
+    await page.waitForSelector('.product-card', { visible: true, timeout: 15000 });
+    await page.screenshot()
+    const showMoreButton = await page.waitForSelector('#show-more', { visible: true, timeout: 3000 });
+    console.log({ showMoreButton })
+    await showMoreButton?.evaluate((btn: any) => btn.click());
+    await page.waitForSelector('.product-card', { visible: true, timeout: 15000 });
+    await page.screenshot()
+    
+
+    console.log('Page loaded, scraping products...');
 
     const productList = await page.evaluate(() => {
       const productCards = Array.from(
