@@ -1,7 +1,6 @@
 
-# Warhammer 40k Price Tracker
-
-This is a full-stack application designed to help users find the best deals on Warhammer 40k products. The app compares prices from multiple sources, including Amazon, Games Workshop, and other hobby stores. It allows users to search for specific products, view price histories, and identify the best offers available.
+# Imperium Deals
+This is a full-stack application forged in the crucible of battle to aid commanders in their eternal quest for the most strategic acquisitions of Warhammer 40k relics and resources. The app scouts across the far reaches of the warp—including Amazon, Games Workshop, and other hobby strongholds—to compare prices. It empowers you to search for specific artifacts, review the chronicles of price fluctuations, and identify the most advantageous offers for bolstering your armies. Embrace the wisdom of the Omnissiah and claim victory in the economic skirmishes of the 41st millennium!
 
 ---
 
