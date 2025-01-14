@@ -3,17 +3,17 @@ import { AppDataSource } from '../data-source';
 import { Product } from '../entities/Product';
 import { PriceHistory } from '../entities/PriceHistory';
 
+
+const WARHAMMER_URL = 'https://www.warhammer.com/en-US/shop/warhammer-40000/xenos-armies/tyranids';
+
 export const scrapeGamesworkshop = async () => {
   try {
-    await AppDataSource.initialize();
-
-    const url = 'https://www.warhammer.com/en-US/shop/warhammer-40000/xenos-armies/tyranids';
     const browser = await puppeteer.launch({
       headless: true,
     });
     const page = await browser.newPage();
-    console.log(`Navigating to ${url}...`);
-    const navigationPromise = page.goto(url, { waitUntil: 'load' });
+    console.log(`Navigating to ${WARHAMMER_URL}...`);
+    const navigationPromise = page.goto(WARHAMMER_URL, { waitUntil: 'load' });
     await navigationPromise;
 
     const popupButton = await page.waitForSelector("[data-testid='locale-selector-close-button']");
@@ -24,24 +24,59 @@ export const scrapeGamesworkshop = async () => {
       height: 800,
     });
     await page.waitForSelector('.product-card', { visible: true });
-    
-    let showMoreButton = await page.waitForSelector('#show-more', { visible: true });
+
+    let showMoreButton = await page.waitForSelector('#show-more', { visible: true, timeout: 10000 });
     await showMoreButton?.evaluate((btn: any) => btn.click());
+    await page.evaluate(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    let count = 0;
+
+    while (true) {
+      const showMoreButton = await page.$('#show-more');
+
+      if (!showMoreButton) {
+        console.log('No more "Show More" button found. Breaking loop...');
+        break;
+      }
+
+      console.log(`Clicking "Show More" button; count: ${count++}`);
+
+      await page.evaluate(() => {
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+      await showMoreButton.evaluate((btn: any) => btn.click());
+
+      try {
+        await page.waitForFunction(
+          () => !document.querySelector('#show-more'),
+          { timeout: 20000 }
+        );
+      } catch (error) {
+        console.log('Timeout waiting for "Show More" button to disappear.');
+        break;
+      }
+
+      await page.waitForSelector('.product-card', { visible: true, timeout: 10000 });
+    }
+
+    await page.evaluate(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+    });
 
     await page.screenshot({ path: 'example.png' });
-    
-    await page.waitForSelector('.product-card', { visible: true, });
-    const productList = await page.evaluate(() => {
-      const productCards = Array.from(
-        document.querySelectorAll('.product-card')
-      );
+
+    const productList = await page.evaluate((urlBase) => {
+      const productCards = Array.from(document.querySelectorAll('.product-card'));
 
       return productCards.map((card: Element) => {
         const cardElement = card as HTMLElement;
 
         const name = cardElement.querySelector("[data-testid='product-card-name']")?.textContent?.trim();
         const priceText = cardElement.querySelector("[data-testid='product-card-current-price']")?.textContent?.trim();
-        const url = cardElement.querySelector("a")?.getAttribute("href");
+        const relativeUrl = cardElement.querySelector("a")?.getAttribute("href");
+        const url = relativeUrl ? new URL(relativeUrl, urlBase).toString() : null;
 
         const price = priceText ? parseFloat(priceText.replace("$", "").trim()) : NaN;
 
@@ -54,11 +89,12 @@ export const scrapeGamesworkshop = async () => {
           name,
           price,
           description: "Description not available",
-          url: url ? "https://www.warhammer.com" + url : "",
+          url,
+          source: new URL(urlBase).hostname.replace('www.', ''),
           isOnlineOnly: !!cardElement.querySelector("[data-testid*='badge']")
         };
       }).filter((product): product is NonNullable<typeof product> => product !== null);
-    });
+    }, WARHAMMER_URL);
 
     if (productList.length === 0) {
       console.log('No products found.');
@@ -70,14 +106,15 @@ export const scrapeGamesworkshop = async () => {
     for (const productData of productList) {
       console.log({ product: productData });
 
-      let product = await productRepository.findOneBy({ name: productData.name });
+      let product = await productRepository.findOneBy({ name: productData.name, source: productData.source });
 
       if (!product) {
         product = productRepository.create({
           name: productData.name,
           price: productData.price,
           description: productData.description,
-          url: productData.url,
+          url: productData.url || '',
+          source: productData.source,
           isOnlineOnly: productData.isOnlineOnly,
         });
         await productRepository.save(product);

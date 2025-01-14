@@ -9,8 +9,11 @@ import { AppDataSource } from './src/data-source';
 async function runScrapingTask() {
   console.log('Running the scraping task...');
   try {
-    
-    await scrapeGamesworkshop();
+
+    if (!AppDataSource.isInitialized) {
+      await AppDataSource.initialize();
+    }
+    // const gwProducts = await scrapeGamesworkshop();
     console.log('Starting scrape for wargamesportal all factions...');
     const allProducts: { name: string; price: string; url: string; faction?: string }[] = [];
 
@@ -29,20 +32,25 @@ async function runScrapingTask() {
       }))
     );
 
+    // console.log('Scraping GamesWorkShop completed. Saving to database ->', gwProducts?.length);
+    console.log('Scraping WargamesPortal completed. Saving to database ->', allProducts?.length);
+
   } catch (error) {
     console.error('Error during scraping:', error);
   }
 
 }
 
-AppDataSource.initialize()
-  .then(async () => {
-    console.log('Data Source Initialized');
-    await runScrapingTask();
+runScrapingTask();
 
-    const job = new CronJob('0 * * * *', runScrapingTask, null, true, 'America/Los_Angeles');
-    job.start();
-  })
-  .catch((error) => {
-    console.error('Error initializing data source:', error);
-  });
+// AppDataSource.initialize()
+//   .then(async () => {
+//     console.log('Data Source Initialized');
+//     await runScrapingTask();
+
+//     const job = new CronJob('0 * * * *', runScrapingTask, null, true, 'America/Los_Angeles');
+//     job.start();
+//   })
+//   .catch((error) => {
+//     console.error('Error initializing data source:', error);
+//   });

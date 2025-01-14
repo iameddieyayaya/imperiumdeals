@@ -1,4 +1,4 @@
-export const factions = [
+export const rougetradersLinks = [
   // {
   //   name: 'adeptaSororitas',
   //   url: 'https://wargameportal.com/collections/adepta-sororitas'

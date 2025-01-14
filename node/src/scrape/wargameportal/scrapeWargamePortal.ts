@@ -21,7 +21,17 @@ export async function scrapeWargamePortal(url: string, faction: string): Promise
 		height: 800
 	});
 	await autoScroll(page);
-	await page.waitForSelector('li.js-pagination-result');
+
+	try {
+		const productList = await page.waitForSelector('li.js-pagination-result', { timeout: 10000 });
+		if (!productList) {
+			console.log('No products found');
+			return [];
+		}
+	} catch (error) {
+		console.error('Error waiting for pagination results:', error);
+		return []
+	}
 
 	const products: Product[] = [];
 
