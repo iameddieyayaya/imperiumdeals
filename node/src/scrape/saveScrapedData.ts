@@ -21,7 +21,7 @@ export async function saveScrapedData(products: { name: string; price: string; u
         if (existingProduct.price !== price) {
           existingProduct.price = price;
           existingProduct.lastUpdated = now;
-          console.log('Updating price for', {existingProduct});
+          console.log('Updating price for', { existingProduct });
 
           const priceHistory = priceHistoryRepository.create({
             price,
@@ -37,8 +37,9 @@ export async function saveScrapedData(products: { name: string; price: string; u
           name: product.name,
           price,
           url: product.url,
+          source: tempURL.hostname.replace('www.', ''),
+          faction: product.faction,
           lastUpdated: now,
-          source: tempURL.hostname.replace('www.', '')
         });
 
         const savedProduct = await productRepository.save(newProduct);

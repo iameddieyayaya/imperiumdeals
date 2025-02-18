@@ -1,7 +1,10 @@
 import express, { Request, Response } from 'express';
+import dotenv from 'dotenv';
+
 import { AppDataSource } from './data-source';
 import { Product } from './entities/Product';
-import dotenv from 'dotenv'; ``
+import searchRouter from './routes/search';
+
 
 dotenv.config();
 
@@ -20,6 +23,9 @@ AppDataSource.initialize()
   });
 
 // Route to fetch all products
+app.use('/api', searchRouter);
+
+
 app.get('/products', async (_req: Request, res: Response) => {
   try {
     const products = await AppDataSource.getRepository(Product).find();
