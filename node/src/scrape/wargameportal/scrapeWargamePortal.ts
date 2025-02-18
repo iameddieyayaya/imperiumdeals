@@ -12,14 +12,13 @@ export async function scrapeWargamePortal(url: string, factionName: string): Pro
 	const browser = await puppeteer.launch({ headless: true });
 	const page = await browser.newPage();
 
-
 	await page.goto(url, {
 		waitUntil: 'domcontentloaded',
 	});
 
 	await page.setViewport({
 		width: 1200,
-		height: 800
+		height: 800,
 	});
 	await autoScroll(page);
 
@@ -31,15 +30,13 @@ export async function scrapeWargamePortal(url: string, factionName: string): Pro
 		}
 	} catch (error) {
 		console.error('Error waiting for pagination results:', error);
-		return []
+		return [];
 	}
 
 	const products: Product[] = [];
 
-	const scrapedProducts = await page.evaluate(() => {
-		const productElements = Array.from(
-			document.querySelectorAll('.card')
-		);
+	const scrapedProducts = await page.evaluate((factionName) => {
+		const productElements = Array.from(document.querySelectorAll('.card'));
 		const products: Product[] = [];
 
 		productElements.forEach((productElement) => {
@@ -55,13 +52,12 @@ export async function scrapeWargamePortal(url: string, factionName: string): Pro
 		});
 
 		return products;
-	});
+	}, factionName);
 
 	products.push(...scrapedProducts);
 
 	await browser.close();
 	return products.map((product) => ({
 		...product,
-		factionName,
 	}));
 }

@@ -101,7 +101,7 @@ export const wargameportalFactionLinks = [
   //   url: 'https://wargameportal.com/collections/tau-empire'
   // },
   {
-    name: 'tyranids',
+    name: 'Tyranids',
     url: 'https://wargameportal.com/collections/tyranids'
   },
   // { 

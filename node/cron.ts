@@ -41,23 +41,23 @@ async function runScrapingTask() {
         faction: name,
       }));
 
-      console.log({ formattedAmazonProducts });
-
       // Add Amazon products to the combined list
       allProducts.push(...formattedAmazonProducts);
     }
 
 
-
     console.log('Scraping completed. Saving to database...');
     await saveScrapedData(
-      allProducts.map((product) => ({
-        ...product,
-        faction: product.faction || '',
-      }))
-    );
+      allProducts.map((product) => {
+        return {
+          name: product.name,
+          price: product.price,
+          url: product.url,
+          faction: product.faction,
+        };
+      }
+      ));
 
-    // console.log('Scraping GamesWorkShop completed. Saving to database ->', gwProducts?.length);
     console.log('Scraping Completed. Saving to database ->', allProducts?.length);
 
   } catch (error) {

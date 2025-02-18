@@ -27,8 +27,8 @@ export class Product {
   @Column()
   source!: string;
 
-  @Column({ type: 'varchar', nullable: true })
-  faction!: string
+  @Column({ nullable: false })
+  faction: string
 
   @OneToMany(() => PriceHistory, (priceHistory) => priceHistory.product, { cascade: true })
   priceHistories!: PriceHistory[];
