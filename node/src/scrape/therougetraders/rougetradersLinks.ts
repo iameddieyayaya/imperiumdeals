@@ -1,8 +1,8 @@
-export const factions = [
-  {
-    name: 'adeptaSororitas',
-    url: 'https://wargameportal.com/collections/adepta-sororitas'
-  },
+export const rougetradersLinks = [
+  // {
+  //   name: 'adeptaSororitas',
+  //   url: 'https://wargameportal.com/collections/adepta-sororitas'
+  // },
   // {
   //   name: 'adeptusCustodes',
   //   url: 'https://wargameportal.com/collections/adeptus-custodes'
@@ -16,7 +16,7 @@ export const factions = [
   //   url: 'https://wargameportal.com/collections/astra-militarum'
   // },
   // { 
-    
+
   //   name: 'blackTemplars', 
   //   url: 'https://wargameportal.com/collections/black-templars'
   // },
@@ -100,10 +100,10 @@ export const factions = [
   //   name: 'tauEmpire', 
   //   url: 'https://wargameportal.com/collections/tau-empire'
   // },
-  // { 
-  //   name: 'tyranids', 
-  //   url: 'https://wargameportal.com/collections/tyranids'
-  // },
+  {
+    name: 'tyranids',
+    url: 'https://wargameportal.com/collections/tyranids'
+  },
   // { 
   //   name: 'killteam', 
   //   url: 'https://wargameportal.com/collections/kill-team'

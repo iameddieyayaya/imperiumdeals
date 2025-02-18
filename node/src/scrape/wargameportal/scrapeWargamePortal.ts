@@ -5,9 +5,10 @@ type Product = {
 	name: string;
 	price: string;
 	url: string;
+	faction: string;
 };
 
-export async function scrapeWargamePortal(url: string, faction: string): Promise<Product[]> {
+export async function scrapeWargamePortal(url: string, factionName: string): Promise<Product[]> {
 	const browser = await puppeteer.launch({ headless: true });
 	const page = await browser.newPage();
 
@@ -21,7 +22,17 @@ export async function scrapeWargamePortal(url: string, faction: string): Promise
 		height: 800
 	});
 	await autoScroll(page);
-	await page.waitForSelector('li.js-pagination-result');
+
+	try {
+		const productList = await page.waitForSelector('li.js-pagination-result', { timeout: 10000 });
+		if (!productList) {
+			console.log('No products found');
+			return [];
+		}
+	} catch (error) {
+		console.error('Error waiting for pagination results:', error);
+		return []
+	}
 
 	const products: Product[] = [];
 
@@ -39,7 +50,7 @@ export async function scrapeWargamePortal(url: string, faction: string): Promise
 			const url = "https://wargameportal.com/" + productElement.querySelector('a')?.getAttribute('href') || '';
 
 			if (name && price !== 'NaN') {
-				products.push({ name, price: `${price}`, url });
+				products.push({ name, price: `${price}`, url, faction: factionName });
 			}
 		});
 
@@ -51,6 +62,6 @@ export async function scrapeWargamePortal(url: string, faction: string): Promise
 	await browser.close();
 	return products.map((product) => ({
 		...product,
-		faction,
+		factionName,
 	}));
 }

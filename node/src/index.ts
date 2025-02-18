@@ -39,30 +39,32 @@ app.get('/products/search', async (req: Request, res: Response): Promise<void> =
 
   try {
     const productRepo = AppDataSource.getRepository(Product);
-    const product = await productRepo.findOne({
+    const products = await productRepo.find({
       where: { name: productName },
       relations: ['priceHistories'],
     });
 
-    console.log("Product found:", product);
-
-    if (!product) {
+    if (!products || products.length === 0) {
       res.status(404).json({ message: "Product not found" });
       return;
     }
+    const results = products.map((product) => {
+      const priceHistories = product.priceHistories.map((history) => ({
+        website: new URL(product.url).hostname,
+        price: history.price,
+        recordedAt: history.recordedAt,
+      }));
 
-    const priceHistories = product.priceHistories.map((history) => ({
-      website: new URL(product.url).hostname,
-      price: history.price,
-      recordedAt: history.recordedAt,
-    }));
-
-    res.status(200).json({
-      product: product.name,
-      description: product.description,
-      url: product.url,
-      priceHistories,
+      return {
+        product: product.name,
+        description: product.description || "Description not available",
+        url: product.url,
+        source: product.source,
+        priceHistories,
+      };
     });
+
+    res.status(200).json(results);
   } catch (error) {
     console.error("Error searching products:", error);
     res.status(500).json({ error: "An error occurred while searching for products" });

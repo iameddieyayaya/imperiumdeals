@@ -4,7 +4,7 @@ import { PriceHistory } from "./PriceHistory";
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()
-  id!: number; // Use the definite assignment assertion operator (!)
+  id!: number;
 
   @Column()
   name!: string;
@@ -16,7 +16,7 @@ export class Product {
   description!: string | null;
 
   @Column()
-  url!: string;
+  url: string;
 
   @Column({ default: false })
   isOnlineOnly!: boolean;
@@ -24,8 +24,14 @@ export class Product {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   lastUpdated!: Date;
 
+  @Column()
+  source!: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  faction!: string
+
   @OneToMany(() => PriceHistory, (priceHistory) => priceHistory.product, { cascade: true })
-  priceHistories!: PriceHistory[]; // Use the definite assignment assertion operator (!)
+  priceHistories!: PriceHistory[];
 
   constructor(
     name: string,
@@ -33,7 +39,9 @@ export class Product {
     description: string | null,
     url: string,
     isOnlineOnly: boolean,
+    source: string,
     priceHistories: PriceHistory[],
+    faction: string,
     lastUpdated: Date = new Date()
   ) {
     this.name = name;
@@ -41,7 +49,9 @@ export class Product {
     this.description = description;
     this.url = url;
     this.isOnlineOnly = isOnlineOnly;
+    this.source = source;
     this.priceHistories = priceHistories;
+    this.faction = faction;
     this.lastUpdated = lastUpdated;
   }
 }

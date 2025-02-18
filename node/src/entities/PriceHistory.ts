@@ -12,7 +12,7 @@ export class PriceHistory {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   recordedAt: Date;
 
-  @ManyToOne(() => Product, (product) => product.priceHistories, { nullable: false })
+  @ManyToOne(() => Product, (product) => product.priceHistories, { nullable: false, onDelete: 'CASCADE' })
   product: Product;
 
   constructor(
