@@ -1,103 +1,103 @@
-export const factions = [
+export const wargameportalFactionLinks = [
   // {
-  //   name: 'adeptaSororitas',
+  //   name: 'Adepta Sororitas',
   //   url: 'https://wargameportal.com/collections/adepta-sororitas'
   // },
   // {
-  //   name: 'adeptusCustodes',
+  //   name: 'Adeptus Custodes',
   //   url: 'https://wargameportal.com/collections/adeptus-custodes'
   // },
   // { 
-  //   name: 'adeptusMechanicus', 
+  //   name: 'Adeptus Mechanicus', 
   //   url: 'https://wargameportal.com/collections/adeptus-mechanicus'
   // },
   // { 
-  //   name: 'astraMilitarum', 
+  //   name: 'Astra Militarum', 
   //   url: 'https://wargameportal.com/collections/astra-militarum'
   // },
   // { 
 
-  //   name: 'blackTemplars', 
+  //   name: 'Black Templars', 
   //   url: 'https://wargameportal.com/collections/black-templars'
   // },
   // { 
-  //   name: 'bloodAngels', 
+  //   name: 'Blood Angels', 
   //   url: 'https://wargameportal.com/collections/blood-angels'
   // },
   // { 
-  //   name: 'darkAngels', 
+  //   name: 'Dark Angels', 
   //   url: 'https://wargameportal.com/collections/dark-angels'
   // },
   // { 
-  //   name: 'greyKnights', 
+  //   name: 'Grey Knights', 
   //   url: 'https://wargameportal.com/collections/grey-knights'
   // },
   // { 
-  //   name: 'imperialAgents', 
+  //   name: 'Imperial Agents', 
   //   url: 'https://wargameportal.com/collections/imperial-agents'
   // },
   // { 
-  //   name: 'imperialKnights', 
+  //   name: 'Imperial Knights', 
   //   url: 'https://wargameportal.com/collections/imperial-knights'
   // },
   // { 
-  //   name: 'spaceMarines', 
+  //   name: 'Space Marines', 
   //   url: 'https://wargameportal.com/collections/space-marines'
   // },
   // { 
-  //   name: 'spaceWolves', 
+  //   name: 'Space Wolves', 
   //   url: 'https://wargameportal.com/collections/space-wolves'
   // },
   // { 
-  //   name: 'chaosDaemons', 
+  //   name: 'Chaos Daemons', 
   //   url: 'https://wargameportal.com/collections/chaos-daemons'
   // },
   // { 
-  //   name: 'chaosKnights', 
+  //   name: 'Chaos Knights', 
   //   url: 'https://wargameportal.com/collections/chaos-knights'
   // },
   // { 
-  //   name: 'chaosSpaceMarines', 
+  //   name: 'Chaos Space Marines', 
   //   url: 'https://wargameportal.com/collections/chaos-space-marines'
   // },
   // { 
-  //   name: 'deathGuard', 
+  //   name: 'Death Guard', 
   //   url: 'https://wargameportal.com/collections/death-guard'
   // },
   // { 
-  //   name: 'thousandSons', 
+  //   name: 'Thousand Sons', 
   //   url: 'https://wargameportal.com/collections/thousand-sons'
   // },
   // { 
-  //   name: 'worldEaters', 
+  //   name: 'World Eaters', 
   //   url: 'https://wargameportal.com/collections/world-eaters'
   // },
   // { 
-  //   name: 'aeldari', 
+  //   name: 'Aeldari', 
   //   url: 'https://wargameportal.com/collections/aeldari'
   // },
   // { 
-  //   name: 'drukhari', 
+  //   name: 'Drukhari', 
   //   url: 'https://wargameportal.com/collections/drukhari'
   // },
   // { 
-  //   name: 'genestealerCults', 
+  //   name: 'Genestealer Cults', 
   //   url: 'https://wargameportal.com/collections/genestealer-cults'
   // },
   // { 
-  //   name: 'leaguesOfVotann', 
+  //   name: 'Leagues of Votann', 
   //   url: 'https://wargameportal.com/collections/leagues-of-votann'
   // },
   // { 
-  //   name: 'necrons', 
+  //   name: 'Necrons', 
   //   url: 'https://wargameportal.com/collections/necrons'
   // },
   // { 
-  //   name: 'orks', 
+  //   name: 'Orks', 
   //   url: 'https://wargameportal.com/collections/orks'
   // },
   // { 
-  //   name: 'tauEmpire', 
+  //   name: 'Tau Empire', 
   //   url: 'https://wargameportal.com/collections/tau-empire'
   // },
   {
@@ -105,7 +105,7 @@ export const factions = [
     url: 'https://wargameportal.com/collections/tyranids'
   },
   // { 
-  //   name: 'killteam', 
+  //   name: 'Killteam', 
   //   url: 'https://wargameportal.com/collections/kill-team'
   // }
 ];

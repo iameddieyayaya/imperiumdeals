@@ -25,7 +25,10 @@ export class Product {
   lastUpdated!: Date;
 
   @Column()
-  source!: string; // New column for source
+  source!: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  faction!: string
 
   @OneToMany(() => PriceHistory, (priceHistory) => priceHistory.product, { cascade: true })
   priceHistories!: PriceHistory[];
@@ -38,6 +41,7 @@ export class Product {
     isOnlineOnly: boolean,
     source: string,
     priceHistories: PriceHistory[],
+    faction: string,
     lastUpdated: Date = new Date()
   ) {
     this.name = name;
@@ -47,6 +51,7 @@ export class Product {
     this.isOnlineOnly = isOnlineOnly;
     this.source = source;
     this.priceHistories = priceHistories;
+    this.faction = faction;
     this.lastUpdated = lastUpdated;
   }
 }

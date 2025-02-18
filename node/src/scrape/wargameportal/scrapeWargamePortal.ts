@@ -5,9 +5,10 @@ type Product = {
 	name: string;
 	price: string;
 	url: string;
+	faction: string;
 };
 
-export async function scrapeWargamePortal(url: string, faction: string): Promise<Product[]> {
+export async function scrapeWargamePortal(url: string, factionName: string): Promise<Product[]> {
 	const browser = await puppeteer.launch({ headless: true });
 	const page = await browser.newPage();
 
@@ -49,7 +50,7 @@ export async function scrapeWargamePortal(url: string, faction: string): Promise
 			const url = "https://wargameportal.com/" + productElement.querySelector('a')?.getAttribute('href') || '';
 
 			if (name && price !== 'NaN') {
-				products.push({ name, price: `${price}`, url });
+				products.push({ name, price: `${price}`, url, faction: factionName });
 			}
 		});
 
@@ -61,6 +62,6 @@ export async function scrapeWargamePortal(url: string, faction: string): Promise
 	await browser.close();
 	return products.map((product) => ({
 		...product,
-		faction,
+		factionName,
 	}));
 }
