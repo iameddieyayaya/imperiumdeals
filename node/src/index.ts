@@ -1,17 +1,30 @@
 import express, { Request, Response } from 'express';
+import cors from 'cors';
 import dotenv from 'dotenv';
 
 import { AppDataSource } from './data-source';
 import { Product } from './entities/Product';
 import searchRouter from './routes/search';
+import priceHistoryRouter from './routes/price-history';
 
 
 dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = 4000;
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 app.use(express.json());
+app.use(cors());
+
+app.use(
+  cors({
+    origin: [FRONTEND_URL],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  })
+)
 
 // Initialize the database connection
 AppDataSource.initialize()
@@ -24,6 +37,7 @@ AppDataSource.initialize()
 
 // Route to fetch all products
 app.use('/api', searchRouter);
+app.use('/api/price-history', priceHistoryRouter);
 
 
 app.get('/products', async (_req: Request, res: Response) => {
