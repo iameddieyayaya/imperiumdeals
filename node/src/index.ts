@@ -1,11 +1,13 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { CronJob } from 'cron';
 
 import { AppDataSource } from './data-source';
 import searchRouter from './routes/search';
 import priceHistoryRouter from './routes/price-history';
 import productsRouter from './routes/products';
+import { runScrapingTask } from '../cron/runScrapingTask';
 
 
 dotenv.config();
@@ -40,7 +42,15 @@ app.use('/api', searchRouter);
 app.use('/api/price-history', priceHistoryRouter);
 app.use('/api/products', productsRouter);
 
-
+// Set up the CronJob to run every two weeks
+const job = new CronJob(
+  '0 0 * * 0/2', // Cron expression for every two weeks
+  runScrapingTask, // Function to run
+  null, // onComplete callback (optional)
+  true, // Start the job immediately
+  'UTC' // Timezone (optional, defaults to system timezone)
+);
+console.log('Cron job scheduled to run every two weeks.', { job });
 
 
 app.listen(port, () => {

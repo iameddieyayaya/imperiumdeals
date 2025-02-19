@@ -1,16 +1,14 @@
-import { CronJob } from 'cron';
-import { wargameportalFactionLinks } from './src/scrape/wargameportal/wargameportalFactionLinks';
-import { factions } from './factions'
+import { wargameportalFactionLinks } from '../src/scrape/wargameportal/wargameportalFactionLinks';
+import { factions } from '../factions'
 
-import { scrapeWargamePortal } from './src/scrape/wargameportal/scrapeWargamePortal';
-import { scrapeGamesworkshop } from './src/scrape/scrapeGamesworkshop';
-import { scrapeAmazon } from './src/scrape/amazon/scrapeAmazon';
+import { scrapeWargamePortal } from '../src/scrape/wargameportal/scrapeWargamePortal';
+import { scrapeGamesworkshop } from '../src/scrape/scrapeGamesworkshop';
+import { scrapeAmazon } from '../src/scrape/amazon/scrapeAmazon';
 
-import { saveScrapedData } from './src/scrape/saveScrapedData';
-import { Product } from './src/entities/Product';
-import { AppDataSource } from './src/data-source';
+import { saveScrapedData } from '../src/scrape/saveScrapedData';
+import { AppDataSource } from '../src/data-source';
 
-async function runScrapingTask() {
+export async function runScrapingTask() {
   console.log('Running the scraping task...');
   try {
 
@@ -44,8 +42,6 @@ async function runScrapingTask() {
       allProducts.push(...formattedAmazonProducts);
     }
 
-
-
     console.log('Scraping completed. Saving to database...');
     await saveScrapedData(
       allProducts.map((product) => {
@@ -63,19 +59,4 @@ async function runScrapingTask() {
   } catch (error) {
     console.error('Error during scraping:', error);
   }
-
 }
-
-runScrapingTask();
-
-// AppDataSource.initialize()
-//   .then(async () => {
-//     console.log('Data Source Initialized');
-//     await runScrapingTask();
-
-//     const job = new CronJob('0 * * * *', runScrapingTask, null, true, 'America/Los_Angeles');
-//     job.start();
-//   })
-//   .catch((error) => {
-//     console.error('Error initializing data source:', error);
-//   });
