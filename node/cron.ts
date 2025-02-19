@@ -17,7 +17,8 @@ async function runScrapingTask() {
     if (!AppDataSource.isInitialized) {
       await AppDataSource.initialize();
     }
-    // const gwProducts = await scrapeGamesworkshop();
+    const gwProducts = await scrapeGamesworkshop();
+    console.log('Scraping Completed -> GamesWorkShop. Saving to database ->', gwProducts?.length);
     console.log('Starting scrape for wargamesportal all factions...');
     const allProducts: { name: string; price: string; url: string; faction: string }[] = [];
 
@@ -30,10 +31,9 @@ async function runScrapingTask() {
     console.log('Starting scrape for Amazon...');
     for (const { name } of factions) {
       console.log(`Scraping ${name} from Amazon...`);
-      const amazonQuery = `Warhammer 40k ${name}`; // Dynamically generate the search query
+      const amazonQuery = `Warhammer 40k ${name}`;
       const amazonProducts = await scrapeAmazon(amazonQuery);
 
-      // Map Amazon products to match the expected format for saveScrapedData
       const formattedAmazonProducts = amazonProducts.map((product) => ({
         name: product.title || 'Unknown Product',
         price: product.totalPrice || '$0.00',
@@ -41,9 +41,9 @@ async function runScrapingTask() {
         faction: name,
       }));
 
-      // Add Amazon products to the combined list
       allProducts.push(...formattedAmazonProducts);
     }
+
 
 
     console.log('Scraping completed. Saving to database...');
@@ -58,7 +58,7 @@ async function runScrapingTask() {
       }
       ));
 
-    console.log('Scraping Completed. Saving to database ->', allProducts?.length);
+    console.log('Scraping Completed', allProducts?.length, 'Items saved to database');
 
   } catch (error) {
     console.error('Error during scraping:', error);

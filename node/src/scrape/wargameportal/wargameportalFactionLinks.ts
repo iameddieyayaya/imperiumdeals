@@ -1,8 +1,8 @@
 export const wargameportalFactionLinks = [
-  // {
-  //   name: 'Adepta Sororitas',
-  //   url: 'https://wargameportal.com/collections/adepta-sororitas'
-  // },
+  {
+    name: 'Adepta Sororitas',
+    url: 'https://wargameportal.com/collections/adepta-sororitas'
+  },
   // {
   //   name: 'Adeptus Custodes',
   //   url: 'https://wargameportal.com/collections/adeptus-custodes'

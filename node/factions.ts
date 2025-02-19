@@ -1,9 +1,9 @@
 export const factions = [
-  // { name: 'Adepta Sororitas' }, // Also known as Sisters of Battle
+  { name: 'Adepta Sororitas' },
   // { name: 'Adeptus Custodes' },
   // { name: 'Adeptus Mechanicus' },
-  // { name: 'Aeldari' }, // Also known as Eldar
-  // { name: 'Astra Militarum' }, // Also known as Imperial Guard
+  // { name: 'Aeldari' },
+  // { name: 'Astra Militarum' },
   // { name: 'Black Templars' },
   // { name: 'Blood Angels' },
   // { name: 'Chaos Daemons' },
@@ -12,14 +12,14 @@ export const factions = [
   // { name: 'Dark Angels' },
   // { name: 'Death Guard' },
   // { name: 'Deathwatch' },
-  // { name: 'Drukhari' }, // Also known as Dark Eldar
+  // { name: 'Drukhari' },
   // { name: 'Genestealer Cults' },
   // { name: 'Grey Knights' },
   // { name: 'Harlequins' },
   // { name: 'Imperial Knights' },
-  // { name: 'Imperial Guard' }, // Alternative name for Astra Militarum
+  // { name: 'Imperial Guard' },
   // { name: 'Inquisition' },
-  // { name: 'Leagues of Votann' }, // Also known as Squats
+  // { name: 'Leagues of Votann' },
   // { name: 'Necrons' },
   // { name: 'Orks' },
   // { name: 'Raven Guard' },
@@ -32,5 +32,5 @@ export const factions = [
   // { name: 'Ultramarines' },
   // { name: 'White Scars' },
   // { name: 'World Eaters' },
-  // { name: 'Ynnari' }, // A subfaction of Aeldari
+  // { name: 'Ynnari' },
 ];
