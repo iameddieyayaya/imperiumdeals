@@ -19,13 +19,11 @@ export default async function ProductPage({ params }: { params: Promise<{ name: 
   const fetchProducts = async (productName: string): Promise<Product[]> => {
     try {
       const URL = `${API_URL}/search?query=${encodeURIComponent(productName)}`;
-      console.log({ URL });
       const response = await fetch(URL);
       if (!response.ok) {
         throw new Error('Failed to fetch price history');
       }
       const data = await response.json();
-      console.log({ data })
       return data;
     } catch (error) {
       console.error('Error fetching price history:', error);
