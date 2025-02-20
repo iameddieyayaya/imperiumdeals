@@ -3,24 +3,26 @@ import React, { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { API_URL } from "../config";
 
+interface PriceHistoryEntry {
+  recordedAt: string;
+  price: number;
+}
+
 const PriceHistoryChart = ({ productName }: { productName: string }) => {
-  const [priceHistory, setPriceHistory] = useState<{ recordedAt: string; price: number }[]>([]);
+  const [priceHistory, setPriceHistory] = useState<PriceHistoryEntry[]>([]);
 
   useEffect(() => {
     const fetchPriceHistory = async () => {
       try {
         const response = await fetch(`${API_URL}/price-history?product=${encodeURIComponent(productName)}`);
         if (!response.ok) throw new Error("Failed to fetch price history");
-        const data = await response.json();
+        const data: PriceHistoryEntry[] = await response.json();
         console.log({ data });
 
-        setPriceHistory(data.map((entry: any) => {
-          console.log({ entry });
-          return {
-            recordedAt: entry.recordedAt,
-            price: entry.price,
-          };
-        }));
+        setPriceHistory(data.map((entry: PriceHistoryEntry) => ({
+          recordedAt: entry.recordedAt,
+          price: entry.price,
+        })));
       } catch (error) {
         console.error("Error fetching price history:", error);
       }
@@ -28,6 +30,8 @@ const PriceHistoryChart = ({ productName }: { productName: string }) => {
 
     fetchPriceHistory();
   }, [productName]);
+
+  if (priceHistory.length === 0) return <div>Loading...</div>;
 
   return (
     <div className="w-full h-96">

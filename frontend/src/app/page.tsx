@@ -1,6 +1,6 @@
-import SearchBar from '@/app/components/SearchBar';
-import { ProductCard } from '@/app/components/ProductCard';
-import { PriceDropCard } from './components/PriceDropCard';
+import SearchBar from '@components/SearchBar';
+import { ProductCard } from '@components/ProductCard';
+import { PriceDropCard } from '@components/PriceDropCard';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -29,6 +29,10 @@ export default async function HomePage() {
 
   const latestPriceDropsData = await fetch(`${API_URL}/products/price-drops`)
   const latestPriceDrops: PriceDrop[] = await latestPriceDropsData.json()
+
+  if (!mostTrackedProducts || !latestPriceDrops) {
+    return <div className="text-white">Loading...</div>
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 py-8">

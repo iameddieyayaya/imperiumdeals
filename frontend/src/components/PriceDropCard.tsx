@@ -1,4 +1,4 @@
-import { PriceDrop } from "../page";
+import { PriceDrop } from '../app/page'
 
 export const PriceDropCard = ({ product }: { product: PriceDrop }) => {
   return (

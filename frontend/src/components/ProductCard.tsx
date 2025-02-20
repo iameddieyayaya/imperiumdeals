@@ -1,5 +1,5 @@
 import getDomainName from "@/helpers/getDomainName";
-import { Product } from "../page";
+import { Product } from "../app/page";
 
 export const ProductCard = ({ product }: { product: Product }) => {
   const formattedDate = new Date(product.lastUpdated).toLocaleDateString();

@@ -1,5 +1,6 @@
-import PriceHistoryChart from "@/app/components/PriceHistoryChart";
-import { API_URL } from "../../config";
+import PriceHistoryChart from "../../../components/PriceHistoryChart";
+
+import { API_URL } from "../../../config";
 
 interface Product {
   description: string | null;
@@ -12,8 +13,8 @@ interface Product {
   url: string;
 }
 
-export default async function ProductPage({ params }: { params: { name: string } }) {
-  const name = await decodeURIComponent(params.name);
+export default async function ProductPage({ params }: { params: Promise<{ name: string }> }) {
+  const name = decodeURIComponent((await params).name);
 
   const fetchProducts = async (productName: string): Promise<Product[]> => {
     try {
@@ -33,6 +34,10 @@ export default async function ProductPage({ params }: { params: { name: string }
   };
 
   const products = await fetchProducts(name);
+
+  if (!products) {
+    return <div className="text-white">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 py-8">

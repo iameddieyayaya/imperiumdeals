@@ -1,4 +1,4 @@
-import { TrendingProduct } from "../page";
+import { TrendingProduct } from "../app/page";
 
 export const TrendingProductCard = ({ product }: { product: TrendingProduct }) => {
   return (
