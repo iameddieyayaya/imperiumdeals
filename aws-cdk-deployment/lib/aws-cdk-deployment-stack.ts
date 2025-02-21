@@ -1,68 +1,73 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import * as ecs from 'aws-cdk-lib/aws-ecs';
-import * as rds from 'aws-cdk-lib/aws-rds';
-import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
-import * as certificatemanager from 'aws-cdk-lib/aws-certificatemanager';
 
-export class ImperiumDealsStack extends cdk.Stack {
+require('dotenv').config()
+
+const config = {
+  env: {
+    account: process.env.AWS_ACCOUNT_NUMBER,
+    region: process.env.AWS_REGION
+  }
+}
+
+export class ImperiumDealsCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+    super(scope, id, { ...props, env: config.env });
 
-    // Create a VPC
-    const vpc = new ec2.Vpc(this, 'ImperiumDealsVPC', {
-      maxAzs: 2,
+    const defaultVPC = ec2.Vpc.fromLookup(this, 'ImperiumDealsVpc', {
+      isDefault: true,
     });
 
-    // Create an EC2 instance for hosting both backend and frontend
-    const instance = new ec2.Instance(this, 'ImperiumDealsInstance', {
-      vpc,
-      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MICRO),
-      machineImage: ec2.MachineImage.latestAmazonLinux2(),
-    });
+    const role = new iam.Role(
+      this,
+      'simple-instance-1-role',
+      { assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com') }
+    )
 
-    // Security group to allow HTTP/HTTPS traffic
-    const securityGroup = new ec2.SecurityGroup(this, 'ImperiumDealsSecurityGroup', {
-      vpc,
+    const secruityGroup = new ec2.SecurityGroup(this, 'simple-instance-1-sg', {
+      vpc: defaultVPC,
       allowAllOutbound: true,
-    });
-    securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(80), 'Allow HTTP');
-    securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(443), 'Allow HTTPS');
-    securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(3000), 'Allow Frontend');
-    securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(4000), 'Allow Backend');
-
-    instance.addSecurityGroup(securityGroup);
-
-    // Create an RDS PostgreSQL instance
-    const database = new rds.DatabaseInstance(this, 'ImperiumDealsDB', {
-      engine: rds.DatabaseInstanceEngine.postgres({ version: rds.PostgresEngineVersion.VER_14_15 }),
-      instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.MICRO),
-      vpc,
-      multiAz: false,
-      allocatedStorage: 20,
-      securityGroups: [securityGroup],
-      publiclyAccessible: false,
+      securityGroupName: 'simple-instance-1-sg',
     });
 
-    // Output database connection details
-    new cdk.CfnOutput(this, 'DatabaseEndpoint', {
-      value: database.dbInstanceEndpointAddress,
-    });
+    secruityGroup.addIngressRule(
+      ec2.Peer.anyIpv4(),
+      ec2.Port.tcp(22),
+      'allow ssh access from the world'
+    );
 
-    // IAM role for EC2 to access ECR and RDS
-    const role = new iam.Role(this, 'ImperiumDealsInstanceRole', {
-      assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
-    });
-    role.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonEC2ContainerRegistryReadOnly'));
-    role.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonRDSFullAccess'));
-    instance.role.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMManagedInstanceCore'));
+    secruityGroup.addIngressRule(
+      ec2.Peer.anyIpv4(),
+      ec2.Port.tcp(80),
+      'allow http access from the world'
+    );
 
-    // Outputs
-    new cdk.CfnOutput(this, 'InstancePublicIP', {
-      value: instance.instancePublicIp,
-    });
+    secruityGroup.addIngressRule
+      (ec2.Peer.anyIpv4(),
+        ec2.Port.tcp(443),
+        'allow https access from the world'
+      );
+
+
+    const instance = new ec2.Instance(this, 'simple-instance-1', {
+      vpc: defaultVPC,
+      role: role,
+      securityGroup: secruityGroup,
+      instanceName: 'imperiumdeals',
+      instanceType: ec2.InstanceType.of( // t2.micro has free tier usage in aws
+        ec2.InstanceClass.T2,
+        ec2.InstanceSize.MICRO
+      ),
+      machineImage: ec2.MachineImage.latestAmazonLinux2()
+    })
+
+    // cdk lets us output prperties of the resources we create after they are created
+    // we want the ip address of this new instance so we can ssh into it later
+    new cdk.CfnOutput(this, 'simple-instance-1-output', {
+      value: instance.instancePublicIp
+    })
+
   }
 }
