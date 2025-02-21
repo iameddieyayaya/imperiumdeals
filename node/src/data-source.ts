@@ -3,14 +3,14 @@ import { DataSource } from "typeorm";
 import { Product } from "./entities/Product";
 import { PriceHistory } from "./entities/PriceHistory";
 
+import * as dotenv from "dotenv";
+dotenv.config();
+
+const dbConnectionString = process.env.DATABASE_URL || "postgres://user:password@localhost:5432/w40k_deal_finder";
 
 export const AppDataSource = new DataSource({
 	type: "postgres",
-	host: "localhost", 
-	port: 5432,
-	username: "user",
-	password: "password",
-	database: "w40k_deal_finder",
+	url: dbConnectionString,
 	synchronize: true,
 	logging: true,
 	entities: [Product, PriceHistory],
