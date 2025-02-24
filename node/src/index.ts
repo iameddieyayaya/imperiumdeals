@@ -19,14 +19,16 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 app.use(express.json());
 app.use(cors());
 
+console.log('FRONTEND_URL:', FRONTEND_URL);
+
 app.use(
   cors({
-    origin: '*', // ❌ Debugging!
+    origin: [FRONTEND_URL],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   })
-);
+)
 
 // Initialize the database connection
 AppDataSource.initialize()
