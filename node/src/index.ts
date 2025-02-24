@@ -21,12 +21,12 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: [FRONTEND_URL],
+    origin: '*', // ❌ Debugging!
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   })
-)
+);
 
 // Initialize the database connection
 AppDataSource.initialize()
