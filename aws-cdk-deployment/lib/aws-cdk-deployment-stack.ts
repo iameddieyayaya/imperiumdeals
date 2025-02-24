@@ -57,11 +57,13 @@ export class ImperiumDealsCdkStack extends cdk.Stack {
       securityGroup: secruityGroup,
       instanceName: 'imperiumdeals',
       instanceType: ec2.InstanceType.of( // t2.micro has free tier usage in aws
-        ec2.InstanceClass.T2,
+        ec2.InstanceClass.T3,
         ec2.InstanceSize.MICRO
       ),
-      machineImage: ec2.MachineImage.latestAmazonLinux2()
-    })
+      machineImage: ec2.MachineImage.genericLinux({
+        'us-west-1': 'ami-07d2649d67dbe8900',
+      })
+    });
 
     // cdk lets us output prperties of the resources we create after they are created
     // we want the ip address of this new instance so we can ssh into it later
