@@ -13,7 +13,7 @@ import { runScrapingTask } from '../cron/runScrapingTask';
 dotenv.config();
 
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 app.use(express.json());
