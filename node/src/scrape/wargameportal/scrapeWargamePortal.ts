@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer';
 import { autoScroll } from '../autoscroll';
+import { scraperAgs } from '../scraper-config';
 
 type Product = {
 	name: string;
@@ -9,7 +10,10 @@ type Product = {
 };
 
 export async function scrapeWargamePortal(url: string, factionName: string): Promise<Product[]> {
-	const browser = await puppeteer.launch({ headless: true });
+	const browser = await puppeteer.launch({
+		headless: true,
+		args: scraperAgs
+	});
 	const page = await browser.newPage();
 
 	await page.goto(url, {
@@ -23,7 +27,7 @@ export async function scrapeWargamePortal(url: string, factionName: string): Pro
 	await autoScroll(page);
 
 	try {
-		const productList = await page.waitForSelector('li.js-pagination-result', { timeout: 10000 });
+		const productList = await page.waitForSelector('li.js-pagination-result', { timeout: 30000 });
 		if (!productList) {
 			console.log('No products found');
 			return [];

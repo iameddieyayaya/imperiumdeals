@@ -1,10 +1,12 @@
 import puppeteer from "puppeteer";
+import { scraperAgs } from "../scraper-config";
 
 export const searchAmazon = async (query: string) => {
   const AMAZON_URL = `https://www.amazon.com/s?k=warhammer+40k+${encodeURIComponent(query)}`;
 
   const browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    headless: true,
+    args: scraperAgs,
   });
   const page = await browser.newPage();
 

@@ -1,4 +1,5 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
+import { scraperAgs } from '../scraper-config';
 
 interface Product {
   title: string | null;
@@ -11,8 +12,8 @@ export const scrapeAmazon = async (query: string): Promise<Product[]> => {
   const AMAZON_URL = `https://www.amazon.com/s?k=warhammer+40k+${encodeURIComponent(query)}`;
 
   const browser: Browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
     headless: true,
+    args: scraperAgs,
   });
   const page: Page = await browser.newPage();
 

@@ -3,6 +3,7 @@ import { AppDataSource } from '../data-source';
 import { Product } from '../entities/Product';
 import { PriceHistory } from '../entities/PriceHistory';
 import { factions } from '../../factions';
+import { scraperAgs } from './scraper-config';
 
 const WARHAMMER_URL = 'https://www.warhammer.com/en-US/shop/warhammer-40000';
 
@@ -10,6 +11,7 @@ export const scrapeGamesworkshop = async () => {
   try {
     const browser = await puppeteer.launch({
       headless: true,
+      args: scraperAgs
     });
     const page = await browser.newPage();
     console.log(`Navigating to ${WARHAMMER_URL}...`);
