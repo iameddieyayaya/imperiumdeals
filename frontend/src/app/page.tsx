@@ -1,7 +1,8 @@
 import SearchBar from '@components/SearchBar';
 import { ProductCard } from '@components/ProductCard';
 import { PriceDropCard } from '@components/PriceDropCard';
-import { API_URL } from '@/config';
+
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
 export interface Product {
   name: string;
