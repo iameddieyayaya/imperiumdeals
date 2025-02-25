@@ -18,7 +18,7 @@ export const wargameportalFactionLinks = [
   {
 
     name: 'Black Templars',
-    url: 'https://wargameportal.com/collections/black-templars'
+    url: 'https://wargameportal.com/collections/black-templar'
   },
   {
     name: 'Blood Angels',
@@ -30,11 +30,11 @@ export const wargameportalFactionLinks = [
   },
   {
     name: 'Grey Knights',
-    url: 'https://wargameportal.com/collections/grey-knights'
+    url: 'https://wargameportal.com/collections/grey-knights-1'
   },
   {
     name: 'Imperial Agents',
-    url: 'https://wargameportal.com/collections/imperial-agents'
+    url: 'https://wargameportal.com/collections/agents-of-the-imperium'
   },
   {
     name: 'Imperial Knights',
@@ -90,7 +90,7 @@ export const wargameportalFactionLinks = [
   },
   {
     name: 'Necrons',
-    url: 'https://wargameportal.com/collections/necrons'
+    url: 'https://wargameportal.com/collections/necron'
   },
   {
     name: 'Orks',
