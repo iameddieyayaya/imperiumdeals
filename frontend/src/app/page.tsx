@@ -2,6 +2,7 @@ import SearchBar from '@components/SearchBar';
 import { ProductCard } from '@components/ProductCard';
 import { PriceDropCard } from '@components/PriceDropCard';
 import { API_URL } from '../../config';
+import ImperiumSVG from '../../assets/imperium.svg';
 
 export interface Product {
   name: string;
@@ -48,7 +49,12 @@ export default async function HomePage() {
         />
       </a>
       <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold text-center mb-8 text-gold-500">Warhammer 40k Price Tracker</h1>
+        <div className='text-center mb-4'>
+          <div className='flex justify-center items-center'>
+            <h1 className="text-3xl font-bold text-gold-500">Imperium Deals</h1>
+            <ImperiumSVG className="w-20 invert brightness-150 contrast-125" />
+          </div>
+        </div>
 
         <SearchBar />
 
