@@ -60,3 +60,7 @@ export async function runScrapingTask() {
     console.error('Error during scraping:', error);
   }
 }
+
+if (require.main === module) {
+  runScrapingTask();
+}

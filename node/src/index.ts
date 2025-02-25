@@ -19,8 +19,6 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 app.use(express.json());
 app.use(cors());
 
-console.log('FRONTEND_URL:', FRONTEND_URL);
-
 app.use(
   cors({
     origin: [FRONTEND_URL],
@@ -53,7 +51,6 @@ const job = new CronJob(
   'UTC' // Timezone (optional, defaults to system timezone)
 );
 console.log('Cron job scheduled to run every two weeks.', { job });
-
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
