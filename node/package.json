@@ -7,7 +7,8 @@
     "start": "node dist/src/index.js",
     "dev": "nodemon src/index.ts",
     "server": "npm run build && pm2 start dist/src/index.js --name backend && pm2 save",
-    "stop": "pm2 delete backend && pm2 save"
+    "stop": "pm2 delete backend && pm2 save",
+    "scrape": "npx ts-node cron/runScrapingTask.ts"
   },
   "keywords": [],
   "author": "",
