@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { API_URL } from "../config";
+import { API_URL } from "@/app/page";
 
 interface PriceHistoryEntry {
   recordedAt: string;
