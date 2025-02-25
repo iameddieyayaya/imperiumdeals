@@ -1,6 +1,5 @@
+import { API_URL } from "../../../../config";
 import PriceHistoryChart from "../../../components/PriceHistoryChart";
-
-import { API_URL } from "@/app/page";
 
 interface Product {
   description: string | null;
