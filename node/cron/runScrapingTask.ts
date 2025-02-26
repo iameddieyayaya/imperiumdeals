@@ -1,12 +1,13 @@
 import { wargameportalFactionLinks } from '../src/scrape/wargameportal/wargameportalFactionLinks';
 import { factions } from '../factions'
-
-import { scrapeWargamePortal } from '../src/scrape/wargameportal/scrapeWargamePortal';
-import { scrapeGamesworkshop } from '../src/scrape/scrapeGamesworkshop';
-import { scrapeAmazon } from '../src/scrape/amazon/scrapeAmazon';
+import { AppDataSource } from '../src/data-source';
 
 import { saveScrapedData } from '../src/scrape/saveScrapedData';
-import { AppDataSource } from '../src/data-source';
+import { scrapeAmazon } from '../src/scrape/amazon/scrapeAmazon';
+import { scrapeGamesworkshop } from '../src/scrape/scrapeGamesworkshop';
+import { scrapeWargamePortal } from '../src/scrape/wargameportal/scrapeWargamePortal';
+import { rougetradersLinks } from '../src/scrape/therougetraders/rougetradersLinks';
+import { scrapeRogueTraders } from '../src/scrape/therougetraders/scrapeRogueTraders';
 
 export async function runScrapingTask() {
   console.log('Running the scraping task...');
@@ -18,6 +19,7 @@ export async function runScrapingTask() {
     const gwProducts = await scrapeGamesworkshop();
     console.log('Scraping Completed -> GamesWorkShop. Saving to database ->', gwProducts?.length);
     console.log('Starting scrape for wargamesportal all factions...');
+
     const allProducts: { name: string; price: string; url: string; faction: string }[] = [];
 
     for (const { name, url } of wargameportalFactionLinks) {
@@ -42,6 +44,12 @@ export async function runScrapingTask() {
       allProducts.push(...formattedAmazonProducts);
     }
 
+    for (const { name, url } of rougetradersLinks) {
+      console.log(`Scraping ${name} from RogueTraders...`);
+      const products = await scrapeRogueTraders(url, name);
+      allProducts.push(...products);
+    }
+
     console.log('Scraping completed. Saving to database...');
     await saveScrapedData(
       allProducts.map((product) => {
@@ -55,7 +63,6 @@ export async function runScrapingTask() {
       ));
 
     console.log('Scraping Completed', allProducts?.length, 'Items saved to database');
-
   } catch (error) {
     console.error('Error during scraping:', error);
   }
