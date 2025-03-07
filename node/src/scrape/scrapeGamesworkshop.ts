@@ -77,9 +77,6 @@ export const scrapeGamesworkshop = async () => {
       }
     }
 
-    // // Take a screenshot for debugging
-    // await page.screenshot({ path: 'example.png' });
-
     // Scrape all product cards
     const productList = await page.evaluate((urlBase) => {
       const productCards = Array.from(document.querySelectorAll('.product-card'));
