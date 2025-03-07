@@ -16,7 +16,6 @@ export const rougetradersLinks = [
     url: 'https://www.theroguetraders.com/astra-militarum'
   },
   {
-
     name: 'blackTemplars',
     url: 'https://www.theroguetraders.com/collections/black-templars'
   },

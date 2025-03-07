@@ -13,7 +13,7 @@ export class PriceHistory {
   recordedAt: Date;
 
   @ManyToOne(() => Product, (product) => product.priceHistories, { nullable: false, onDelete: 'CASCADE' })
-  product: Product;
+  product!: Product; 
 
   constructor(
     id: number,

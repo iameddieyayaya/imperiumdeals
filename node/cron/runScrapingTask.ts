@@ -16,11 +16,12 @@ export async function runScrapingTask() {
     if (!AppDataSource.isInitialized) {
       await AppDataSource.initialize();
     }
+    const allProducts: { name: string; price: string; url: string; faction: string }[] = [];
+
     const gwProducts = await scrapeGamesworkshop();
     console.log('Scraping Completed -> GamesWorkShop. Saving to database ->', gwProducts?.length);
     console.log('Starting scrape for wargamesportal all factions...');
 
-    const allProducts: { name: string; price: string; url: string; faction: string }[] = [];
 
     for (const { name, url } of wargameportalFactionLinks) {
       console.log(`Scraping ${name} from WarGamesPortal...`);
@@ -29,7 +30,7 @@ export async function runScrapingTask() {
     }
 
     console.log('Starting scrape for Amazon...');
-    for (const { name } of factions) {
+    for (const name of factions) {
       console.log(`Scraping ${name} from Amazon...`);
       const amazonQuery = `Warhammer 40k ${name}`;
       const amazonProducts = await scrapeAmazon(amazonQuery);

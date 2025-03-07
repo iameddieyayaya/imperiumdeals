@@ -118,11 +118,11 @@ export const scrapeGamesworkshop = async () => {
     // Assign factions to products based on their names
     const productsWithFactions = productList.map((product) => {
       const matchedFaction = factions.find((faction) =>
-        product.url?.toLowerCase().includes(faction.name.toLowerCase())
+        product.url?.toLowerCase().includes(faction.toLowerCase())
       );
       return {
         ...product,
-        faction: matchedFaction ? matchedFaction.name : null,
+        faction: matchedFaction ? matchedFaction : null,
       };
     });
 

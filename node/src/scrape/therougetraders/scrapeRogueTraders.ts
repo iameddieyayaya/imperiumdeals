@@ -48,19 +48,14 @@ export async function scrapeRogueTraders(url: string, factionName: string): Prom
 		const products: Product[] = [];
 
 		productElements.forEach((productElement) => {
-			const name = productElement.querySelector('[data-hook="product-item-name"]')?.textContent?.trim();
+			const name = productElement.querySelector('[data-hook="product-item-name"]')?.textContent?.trim()
 			const regularPrice = productElement.querySelector('[data-hook="product-item-price-before-discount"]')?.textContent?.trim();
 			const salePrice = productElement.querySelector('[data-hook="product-item-price-to-pay"]')?.textContent?.trim();
 			const price = salePrice || regularPrice || "NaN";
 			const url = productElement.querySelector('a[data-hook="product-item-container"]')?.getAttribute("href") || "";
 
-			if (name && price !== "NaN") {
-				const titleCaseName = name
-					.toLowerCase()
-					.split(' ')
-					.map(word => word.charAt(0).toUpperCase() + word.slice(1))
-					.join(' ');
-				products.push({ name: titleCaseName, price, url, faction: factionName });
+			if (name && (price !== "NaN")) {
+				products.push({ name, price, url, faction: factionName });
 			}
 		});
 
